@@ -10,65 +10,17 @@
   <button onclick="iniciarPesquisa()">Iniciar Pesquisa</button>
 
   <script>
-    // Função para iniciar a pesquisa de tempo e distância
-    function iniciarPesquisa() {
-      // Verifica se há uma lista de cidades no Local Storage
-      if (localStorage.getItem("minhaLista")) {
-        // Obtém a lista de cidades do Local Storage e converte de volta para um array
-        const cidades = JSON.parse(localStorage.getItem("minhaLista"));
+  const minhaLista = JSON.parse(localStorage.getItem('minhaLista'));
 
-        // Função para pesquisar o tempo e a distância entre duas cidades
-        function pesquisarTempoDistancia(cidadeOrigem, cidadeDestino) {
-          // Chave de API do Google Maps
-          const API_KEY = "AIzaSyAU7y5n5JoOF0590fLuTvPdJyU7Eyz1jPM";
-
-          // Constrói a URL da API Directions
-          const url = `https://maps.googleapis.com/maps/api/directions/json?origin=${cidadeOrigem}&destination=${cidadeDestino}&steps=false&key=${API_KEY}`;
-
-          // Faz uma requisição à API Directions
-          fetch(url)
-          .then(response => response.json())
-          .then(data => {
-            const startAddress = data.routes[0].legs[0].start_address;
-            const endAddress = data.routes[0].legs[0].end_address;
-            const distanceText = data.routes[0].legs[0].distance.text;
-            const durationText = data.routes[0].legs[0].duration.text;
-
-            const responseObj = {
-              start_address: startAddress,
-              end_address: endAddress,
-              distance: { text: distanceText },
-              duration: { text: durationText }
-            };
-
-            const mensagem = `Tempo e distância entre ${startAddress} e ${endAddress}: ${durationText}, ${distanceText}.`;
-
-            console.log(responseObj);
-          })
-            .catch(error => {
-              console.log("Ocorreu um erro ao obter os dados da API Directions:", error);
-            });
-        }
-
-        // Limpa o resultado anterior
-        document.getElementById("result").innerHTML = "";
-
-        // Itera sobre as cidades no array
-        for (let i = 0; i < cidades.length - 1; i++) {
-          const cidadeOrigem = cidades[i];
-          const cidadeDestino = cidades[i + 1];
-
-          // Pesquisa o tempo e a distância entre as cidades consecutivas
-          pesquisarTempoDistancia(cidadeOrigem, cidadeDestino);
-        }
-      } else {
-        // Caso não haja lista de cidades no Local Storage
-        const mensagem = "Nenhuma lista de cidades encontrada no Local Storage.";
-        const resultado = document.createElement("p");
-        resultado.textContent = mensagem;
-        document.getElementById("result").appendChild(resultado);
-      }
-    }
+  fetch(`http://localhost:3000/consultar-cidades?minhaLista=${encodeURIComponent(JSON.stringify(minhaLista))}`)
+    .then(response => response.json())
+    .then(data => {
+      console.log('Resultados:', data.resultados);
+      console.log('Soma das distâncias:', data.somaDistancias);
+    })
+    .catch(error => {
+      console.log('Erro:', error);
+    });
   </script>
 </body>
 </html>
