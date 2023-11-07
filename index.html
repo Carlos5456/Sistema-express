@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Google Places Autocomplete Text Box</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAU7y5n5JoOF0590fLuTvPdJyU7Eyz1jPM&libraries=places"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <input type="text" id="autocomplete-input" placeholder="Enter a location">
+  <button id="save-button">add</button>
+  <ul id="item-list"></ul>
+  <button id="guardarlista">Armazenar Valores</button>
+  <script>
+    $(document).ready(function() {
+      var input = document.getElementById('autocomplete-input');
+      
+      var autocomplete = new google.maps.places.Autocomplete(input, options);
+    });
+    </script>
+  <script src="script.js"></script>
+</body>
+</html>
