@@ -26,18 +26,28 @@
           const url = `https://maps.googleapis.com/maps/api/directions/json?origin=${cidadeOrigem}&destination=${cidadeDestino}&steps=false&key=${API_KEY}`;
 
           // Faz uma requisição à API Directions
-          fetch(url, {
-            mode: 'no-cors'
-          })
-          .then(response => response.text())
+          fetch(url)
+          .then(response => response.json())
           .then(data => {
-            const mensagem = `Tempo e distância entre ${cidadeOrigem} e ${cidadeDestino}.`;
+            const startAddress = data.routes[0].legs[0].start_address;
+            const endAddress = data.routes[0].legs[0].end_address;
+            const distanceText = data.routes[0].legs[0].distance.text;
+            const durationText = data.routes[0].legs[0].duration.text;
 
-            console.log(mensagem);
+            const responseObj = {
+              start_address: startAddress,
+              end_address: endAddress,
+              distance: { text: distanceText },
+              duration: { text: durationText }
+            };
+
+            const mensagem = `Tempo e distância entre ${startAddress} e ${endAddress}: ${durationText}, ${distanceText}.`;
+
+            console.log(responseObj);
           })
-          .catch(error => {
-            console.log("Ocorreu um erro ao obter os dados da API Directions:", error);
-          });
+            .catch(error => {
+              console.log("Ocorreu um erro ao obter os dados da API Directions:", error);
+            });
         }
 
         // Limpa o resultado anterior
